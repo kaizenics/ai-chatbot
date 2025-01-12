@@ -7,10 +7,31 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from 'next/link'
 import LogOutButton from '@/components/logout'
+import { toast } from 'sonner'
 
 export default function ChatPage() {
   const { data: session } = useSession()
-  const { messages, input, handleInputChange, handleSubmit } = useChat()
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    onResponse: (response) => {
+      if (response.status === 200) {
+        toast.success('Message sent successfully')
+      } else {
+        toast.error('Failed to send message')
+      }
+    },
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`)
+    }
+  })
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (input.trim()) {
+      handleSubmit(e)
+    } else {
+      toast.warning('Please enter a message')
+    }
+  }
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
@@ -19,7 +40,7 @@ export default function ChatPage() {
           <CardTitle className="text-2xl font-bold">AI Chatbot</CardTitle>
           <div className="flex items-center space-x-4">
             <span>Hello, {session?.user?.name}</span>
-           <LogOutButton/>
+            <LogOutButton />
           </div>
         </CardHeader>
         <CardContent className="flex-grow overflow-y-auto p-4 space-y-4">
@@ -39,7 +60,7 @@ export default function ChatPage() {
           ))}
         </CardContent>
         <CardFooter>
-          <form onSubmit={handleSubmit} className="flex w-full space-x-2">
+          <form onSubmit={handleFormSubmit} className="flex w-full space-x-2">
             <Input
               value={input}
               onChange={handleInputChange}

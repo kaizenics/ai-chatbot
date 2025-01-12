@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { toast } from 'sonner'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -11,9 +12,10 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     const result = await signIn('google', { callbackUrl: '/', redirect: false })
     if (result?.ok) {
+      toast.success('Signed in successfully')
       router.push('/')
     } else {
-      alert('Google Sign-In failed')
+      toast.error('Google Sign-In failed')
     }
   }
 
