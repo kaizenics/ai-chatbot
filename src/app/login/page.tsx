@@ -23,7 +23,7 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
+          <CardTitle className="font-heading text-2xl font-bold text-center">Viro with Qwen AI</CardTitle>
         </CardHeader>
         <CardContent className="text-center">
           <p className="mb-4">Sign in with your Google account to continue</p>
