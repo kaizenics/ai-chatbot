@@ -45,7 +45,7 @@ export function ChatSidebar({ isOpen, onClose }: ChatSidebarProps) {
 
         <div className="p-3">
           <Button variant="ghost" className="w-full justify-start gap-2" asChild>
-            <Link href="/settings">
+            <Link href="/settings/account">
               <Settings className="h-4 w-4" />
               Settings
             </Link>
