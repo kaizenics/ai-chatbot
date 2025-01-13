@@ -1,9 +1,10 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useChat } from "ai/react";
 import { Menu } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -12,7 +13,10 @@ import { AIResponseIndicator } from "@/components/ai-response-indicator";
 import { UserAvatar } from "@/components/user-avatar";
 
 export default function ChatPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   const { messages, input, handleInputChange, handleSubmit, isLoading, error } =
     useChat({
       onResponse: (response) => {
@@ -27,7 +31,11 @@ export default function ChatPage() {
       },
     });
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +45,18 @@ export default function ChatPage() {
       toast.warning("Please enter a message");
     }
   };
+
+  if (status === "loading") {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Loading...</div>
+      </div>
+    );
+  }
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="flex h-screen bg-background">
