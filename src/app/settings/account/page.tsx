@@ -1,14 +1,19 @@
 // /settings/account/page.tsx
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useSession, signOut } from "next-auth/react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { signOut } from "next-auth/react"
+import { toast } from "sonner"
 
 export default function AccountPage() {
   const { data: session } = useSession()
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: '/login' })
+    toast.success('Signed out successfully')
+  }
 
   return (
     <div className="space-y-6">
@@ -27,7 +32,7 @@ export default function AccountPage() {
           <Button 
             variant="outline" 
             className="w-full text-destructive hover:text-destructive"
-            onClick={() => signOut()}
+            onClick={handleSignOut}
           >
             Sign Out
           </Button>
