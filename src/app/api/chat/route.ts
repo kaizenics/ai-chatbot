@@ -1,14 +1,27 @@
-import { openai } from '@ai-sdk/openai'
-import { streamText } from 'ai'
+import { OpenAI } from 'openai';
 
-export const runtime = 'edge'
+const api = new OpenAI({
+  baseURL: 'https://api.aimlapi.com/v1',
+  apiKey: '5bf82175ced447a78a49deeef073f473',
+});
 
-export async function POST(req: Request) {
-  const { messages } = await req.json()
-  const result = streamText({
-    model: openai('gpt-4-turbo'),
-    messages,
-  })
-  return result.toDataStreamResponse()
-}
+const main = async () => {
+  const result = await api.chat.completions.create({
+    model: 'Qwen/Qwen-14B-Chat',
+    messages: [
+      {
+        role: 'system',
+        content: 'You are an AI assistant who knows everything.',
+      },
+      {
+        role: 'user',
+        content: 'Tell me, why is the sky blue?'
+      }
+    ],
+  });
 
+  const message = result.choices[0].message.content;
+  console.log(`Assistant: ${message}`);
+};
+
+main();

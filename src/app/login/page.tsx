@@ -13,14 +13,14 @@ export default function LoginPage() {
     const result = await signIn('google', { callbackUrl: '/', redirect: false })
     if (result?.ok) {
       toast.success('Signed in successfully')
-      router.push('/')
+      router.push('/chat')
     } else {
       toast.error('Google Sign-In failed')
     }
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
